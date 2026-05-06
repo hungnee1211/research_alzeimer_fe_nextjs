@@ -34,7 +34,8 @@ export default function Home() {
       const formData = new FormData()
       formData.append("file", file)
 
-      const res = await fetch("http://localhost:8000/predict", {
+
+      const res = await fetch(`${process.env.ENDPOINT_URL}/predict`, {
         method: "POST",
         body: formData,
       })
@@ -59,7 +60,7 @@ export default function Home() {
 
       <main className="relative z-10 max-w-5xl mx-auto px-6 py-12">
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
@@ -77,7 +78,7 @@ export default function Home() {
 
         <div className="grid md:grid-cols-2 gap-8 items-start">
           {/* Left Side: Upload Section */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 p-8 rounded-3xl shadow-2xl"
@@ -86,13 +87,13 @@ export default function Home() {
               <Upload className="w-5 h-5 text-blue-400" /> Upload MRI Scan
             </h2>
 
-            <div 
+            <div
               onClick={() => fileInputRef.current?.click()}
               className={`group relative border-2 border-dashed rounded-2xl p-10 transition-all cursor-pointer text-center
                 ${preview ? 'border-blue-500/50 bg-blue-500/5' : 'border-slate-700 hover:border-blue-500/50 hover:bg-slate-800/50'}`}
             >
               <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleSelectFile} />
-              
+
               {preview ? (
                 <div className="space-y-4">
                   <img src={preview} alt="Preview" className="mx-auto max-h-64 rounded-lg shadow-lg border border-slate-700" />
@@ -115,8 +116,8 @@ export default function Home() {
               onClick={handleUpload}
               disabled={loading || !file}
               className={`w-full mt-8 py-4 px-6 rounded-xl font-bold transition-all flex items-center justify-center gap-2
-                ${loading || !file 
-                  ? 'bg-slate-700 text-slate-500 cursor-not-allowed' 
+                ${loading || !file
+                  ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
                   : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20 active:scale-[0.98]'}`}
             >
               {loading ? (
@@ -130,7 +131,7 @@ export default function Home() {
             </button>
 
             {error && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 text-red-400 text-sm"
               >
@@ -167,7 +168,7 @@ export default function Home() {
 
                   {/* Confidence Bar */}
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <motion.div 
+                    <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${result.confidence * 100}%` }}
                       className="bg-blue-500 h-2 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)]"
@@ -177,10 +178,10 @@ export default function Home() {
                   <div className="space-y-4">
                     <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-widest">Grad-CAM Heatmap</h3>
                     <div className="relative group overflow-hidden rounded-2xl border border-slate-700 shadow-inner bg-slate-900">
-                      <img 
-                        src={result.heatmap_url} 
-                        alt="Heatmap" 
-                        className="w-full h-auto transition-transform duration-500 group-hover:scale-110" 
+                      <img
+                        src={result.image_url}
+                        alt="Heatmap"
+                        className="w-full h-auto transition-transform duration-500 group-hover:scale-110"
                       />
                     </div>
                     <p className="text-xs text-slate-500 italic">
@@ -189,7 +190,7 @@ export default function Home() {
                   </div>
                 </motion.div>
               ) : (
-                <motion.div 
+                <motion.div
                   key="empty"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
